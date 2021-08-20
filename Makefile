@@ -1,7 +1,7 @@
-OBJECTS = loader.o kmain.o io.o segments/gdt.o segments/memory_segments.o
+OBJECTS = loader.o kmain.o drivers/io.o drivers/frame_buffer.o drivers/serial_port.o segments/gdt.o segments/segments.o interrupts/keyboard.o interrupts/interrupt_handlers.o interrupts/interrupts.o interrupts/pic.o interrupts/idt.o
     CC = gcc
-    CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
-             -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c
+    CFLAGS = -m32 -nostdlib -fno-builtin -fno-stack-protector \
+         -Wno-unused -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c -masm=intel 
     LDFLAGS = -T link.ld -melf_i386
     AS = nasm
     ASFLAGS = -f elf
@@ -26,6 +26,7 @@ OBJECTS = loader.o kmain.o io.o segments/gdt.o segments/memory_segments.o
 
     run: windOS.iso
 	bochs -f bochsrc.txt -q
+	
 
     %.o: %.c
 	$(CC) $(CFLAGS)  $< -o $@
